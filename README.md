@@ -21,3 +21,14 @@ Move beyond passive log collection to active detection engineering: execute a kn
 
 Sysmon was running and logging locally, but events were not reaching Splunk. Checking the Splunk Forwarder's own log revealed the real cause:
 
+`errorCode=5` = Access Denied. The Splunk Forwarder service didn't have permission to read the Sysmon channel. Fixed by running the service under the **LocalSystem** account:
+
+![Sysmon access denied error in splunkd.log](3-error(1).png)
+
+## Step 2 — Executing the Attack
+
+Using Atomic Red Team, I ran **T1059.001-17**: execution of an obfuscated (Base64-encoded) PowerShell command — a known defense-evasion pattern documented in Red Canary's 2021 Threat Detection Report.
+
+****powershell
+Invoke-AtomicTest T1059.001-17
+
